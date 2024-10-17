@@ -1,0 +1,102 @@
+package bookManager;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.border.*;
+import java.time.*;
+import javax.swing.table.DefaultTableModel;
+
+public class bookManager_GUI extends JFrame {
+
+	// labels and text fields
+	private JLabel maSach_label, tuaSach_label, namXB_label, soTrang_label, ISB_num_label, tacGia_label, nhaXB_label, donGia_label, timMaSach_label;
+	private JTextField maSach_tfield, tuaSach_tfield, namXB_tfield, soTrang_tfield, ISB_num_tfield, tacGia_tfield, nhaXB_tfield, donGia_tfield;
+	private JButton addB, clearB, deleteB, editB, saveB;
+	private JComboBox<String> maSach_combo;
+	private DefaultTableModel tableModel;
+	private JTable table;
+	
+	private bookManager bm;
+	
+	private List<book> b;
+	
+	// constructor
+	public bookManager_GUI() {
+		// set layout
+		super("Quan ly sach");
+		bm = new bookManager();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(1000, 700);
+		
+		JPanel northLayout = new JPanel(new GridLayout(1, 2, 10, 5));
+		
+		Border border = BorderFactory.createTitledBorder("Records editor");
+		northLayout.setBorder(border);
+		
+		// first column
+		JPanel firstCol = new JPanel(new GridLayout(5, 2, 10, 5));
+		
+		maSach_label = new JLabel("Ma sach: ");
+		maSach_tfield = new JTextField(30);
+		
+		tuaSach_label = new JLabel("Tua sach: ");
+		tuaSach_tfield = new JTextField(30);
+		
+		namXB_label = new JLabel("Nam xuat ban: ");
+		namXB_tfield = new JTextField(30);
+		
+		soTrang_label = new JLabel("So trang: ");
+		soTrang_tfield = new JTextField(30);
+		
+		ISB_num_label = new JLabel("Internation Standard Book Number: ");
+		ISB_num_tfield = new JTextField(30);
+		
+		firstCol.add(maSach_label);
+		firstCol.add(maSach_tfield);
+		
+		firstCol.add(tuaSach_label);
+		firstCol.add(tuaSach_tfield);
+		
+		firstCol.add(namXB_label);
+		firstCol.add(namXB_tfield);
+		
+		firstCol.add(soTrang_label);
+		firstCol.add(soTrang_tfield);
+		
+		firstCol.add(ISB_num_label);
+		firstCol.add(ISB_num_tfield);
+				
+		northLayout.add(firstCol);
+		
+		// second column
+		JPanel secondCol = new JPanel(new GridLayout(5, 2, 10, 5));
+		
+		tacGia_label = new JLabel("Tac gia: ");
+		tacGia_tfield = new JTextField(30);
+		
+		nhaXB_label = new JLabel("Nha xuat ban: ");
+		nhaXB_tfield = new JTextField(30);
+		
+		donGia_label = new JLabel("Don gia: ");
+		donGia_tfield = new JTextField(30);
+		
+		secondCol.add(tacGia_label);
+		secondCol.add(tacGia_tfield);
+		
+		secondCol.add(nhaXB_label);
+		secondCol.add(nhaXB_tfield);
+		
+		secondCol.add(donGia_label);
+		secondCol.add(donGia_tfield);
+		
+		add(northLayout, BorderLayout.NORTH);
+		
+		setLocationRelativeTo(null);
+		setVisible(true);
+		
+	}
+	
+}

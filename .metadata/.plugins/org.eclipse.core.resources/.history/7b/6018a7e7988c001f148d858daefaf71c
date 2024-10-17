@@ -1,0 +1,105 @@
+package Bai1;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+public class ql_sach {
+	private List<Sach> sach;
+	
+	public ql_sach() {
+		sach = new ArrayList<>();
+	}
+	
+	public List<Sach> getSach() {
+		return sach;
+	}
+	
+	// LOAD DATA
+	public void loadDataFromFile(File file, DefaultTableModel tableModel) {
+		tableModel.setRowCount(0);
+		
+		sach.clear();
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			String line;
+			
+			// SKIP COLUMN NAMES (HEADER LINE)
+			br.readLine();
+			while ((line = br.readLine()) != null) {
+				String[] values = line.split(";");
+				if (values.length == 8) {
+					Sach s = new Sach(values[0], values[1], values[2], Integer.parseInt(values[5]), values[4], Integer.parseInt(values[3]), Double.parseDouble(values[6]), values[7]);
+					sach.add(s);
+					tableModel.addRow(values);					
+				}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Lỗi khi đọc file: " + e.getMessage());
+		}
+	}
+	
+	// SAVE DATA
+	public void saveData(DefaultTableModel tableModel) {
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter("dulieu_new.txt"))) {
+			// READ TABLE COLUMN NAMES
+			bw.write(String.join(";", IntStream.range(0, tableModel.getColumnCount()).mapToObj(tableModel::getColumnName).toArray(String[]::new)));
+			
+			// NEW LINE
+			bw.newLine();
+			
+			// TRAVERSE ALL TABLE DATA AND SEPARATE IT WITH ";"
+			for (int i = 0; i < tableModel.getRowCount(); i++) {
+				for (int j = 0; j < tableModel.getColumnCount(); j++) {
+					bw.write(tableModel.getValueAt(i, j).toString());
+					if (j < tableModel.getColumnCount() -1) {
+						bw.write(";");
+					}
+				}
+				bw.newLine();
+			}
+		} catch (IOException e) {
+			System.err.println("Lỗi khi lưu file: " + e.getMessage());
+		}
+	}
+	
+	public void themSach(Sach s, DefaultTableModel tableModel) {
+		sach.add(s);
+		String[] dataRow = {
+				s.getMaSach(),
+				s.getTuaSach(),
+				s.getTacGia(),
+				String.valueOf(s.getNamXB()),
+				s.getNhaXB(),
+				String.valueOf(s.getSoTrang()),
+				String.valueOf(s.getDonGia()),
+				s.getIsb_num()
+		};
+		
+		tableModel.addRow(dataRow);
+	}
+	
+	public void xoaSach(String bookID, DefaultTableModel tableModel) {
+		sach.removeIf(s -> s.getMaSach().equals(bookID));
+		
+		for (int i = 0; i < tableModel.getRowCount(); i++) {
+			if (tableModel.getValueAt(i, 0).equals(bookID)) {
+				tableModel.removeRow(i);
+				break;
+			}
+		}
+	}
+	
+	public void capNhatSach(Sach updateSach) {
+		for (int i = 0; i < sach.size(); i++) {
+			if (sach.get(i).getMaSach().equals(updateSach.getMaSach())) {
+				sach.set(i, updateSach);
+				break;
+			}
+		}
+	}
+}

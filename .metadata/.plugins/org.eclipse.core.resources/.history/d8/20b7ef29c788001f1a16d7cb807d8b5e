@@ -1,0 +1,24 @@
+package nhanVien;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class NhanVien_manage {
+	private Collection<NhanVien> nv;
+	
+	public NhanVien_manage(NhanVien n) {
+		nv.add(n);
+		saveEmployee(n);
+	}
+	
+	public Collection<NhanVien> getNV() {
+		return nv;
+	}
+	
+	private void saveEmployee(NhanVien n) {
+		String sql_query = "INSERT INTO Employee (employee_id, employee_surname, employee_name, employee_age, employee_gender, employee_salary) VALUES (?, ?, ?, ?, ?, ?)"
+	}
+}

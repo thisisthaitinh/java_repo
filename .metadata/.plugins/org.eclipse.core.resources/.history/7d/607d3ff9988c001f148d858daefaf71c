@@ -1,0 +1,10 @@
+package bookManager;
+
+import javax.swing.table.*;
+
+public class bookManager {
+	private List<book> b;
+	public void themSach(book b, DefaultTableModel table) {
+		
+	}
+}

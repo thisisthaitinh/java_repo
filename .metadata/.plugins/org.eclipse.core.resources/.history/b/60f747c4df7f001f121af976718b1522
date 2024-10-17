@@ -1,0 +1,21 @@
+package net.codejava.sql;
+
+import java.sql.*;
+
+public class javaConnect2SQL {
+	public static void main(String[] args) {
+		String url = "jdbc:sqlserver://localhost:1433;databaseName=students";
+		String user, password;
+		user = "sa";
+		password = "thaitinh";
+		
+		try {
+			Connection connection = DriverManager.getConnection(url, user, password);
+			System.out.println("Successfully connected.");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Oops, there's an error!");
+			e.printStackTrace();
+		}
+	}
+}

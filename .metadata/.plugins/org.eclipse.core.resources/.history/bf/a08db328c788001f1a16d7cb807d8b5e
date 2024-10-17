@@ -1,0 +1,20 @@
+package nhanVien;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class NhanVien_manage {
+	private Collection<NhanVien> nv;
+	
+	public NhanVien_manage(NhanVien n) {
+		nv.add(n);
+		saveEmployee(n);
+	}
+	
+	public Collection<NhanVien> getNV() {
+		return nv;
+	}
+}

@@ -1,0 +1,60 @@
+package bookManager;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.border.*;
+import java.time.*;
+import javax.swing.table.DefaultTableModel;
+
+public class bookManager_GUI extends JFrame {
+
+	// labels and text fields
+	private JLabel maSach_label, tuaSach_label, namXB_label, soTrang_label, ISB_num_label, tacGia_label, nhaXB_label, donGia_label, timMaSach_label;
+	private JTextField maSach_tfield, tuaSach_tfield, namXB_tfield, soTrang_tfield, ISB_num_tfield, tacGia_tfield, nhaXB_tfield, donGia_tfield;
+	private JButton addB, clearB, deleteB, editB, saveB;
+	private JComboBox<String> maSach_combo;
+	private DefaultTableModel tableModel;
+	private JTable table;
+	
+	private bookManager bm;
+	
+	private List<book> b;
+	
+	// constructor
+	public bookManager_GUI() {
+		// set layout
+		super("Quan ly sach");
+		bm = new bookManager();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(1000, 700);
+		
+		JPanel mainLayout = new JPanel(new GridLayout(1, 2, 10, 5));
+		
+		Border border = BorderFactory.createTitledBorder("Records editor");
+		mainLayout.setBorder(border);
+		
+		// first column
+		JPanel firstCol = new JPanel(new GridLayout(5, 2, 10, 5));
+		
+		maSach_label = new JLabel("Ma sach: ");
+		maSach_tfield = new JTextField(30);
+		
+		firstCol.add(maSach_label);
+		firstCol.add(maSach_tfield);
+		
+		tuaSach_label = new JLabel("Tua sach: ");
+		tuaSach_tfield = new JTextField(30);
+		
+		mainLayout.add(firstCol);
+		
+		add(mainLayout, BorderLayout.NORTH);
+		
+		setLocationRelativeTo(null);
+		setVisible(true);
+		
+	}
+	
+}

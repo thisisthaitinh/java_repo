@@ -1,0 +1,256 @@
+package nhanVien;
+
+import javax.swing.*;
+import javax.swing.table.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class NhanVien_GUI extends JFrame {
+    private JTable nhanvien_table;
+    private DefaultTableModel tableModel;
+    private JLabel maNV, hoNV, tenNV, tuoiNV, luongNV, timNV;
+    private JTextField txtMaNV, txtHoNV, txtTenNV, txtTuoi, txtLuong, txtTimNV;
+    private JComboBox<String> gioitinhNV;
+    private JButton btnThem, btnSua, btnXoa, btnLuu, btnTim;
+    private NhanVien_manage nv_manage;
+
+    
+//    CONSTRUCTOR
+    public NhanVien_GUI() {
+    	super("^-^");
+    	setDefaultCloseOperation(EXIT_ON_CLOSE);
+    	setSize(1000, 500);
+//    	MAIN LAYOUT
+    	nv_manage = new NhanVien_manage();
+    	
+    	JPanel mainPanel = new JPanel(new BorderLayout());
+//    	HEADER
+    	JLabel title = new JLabel("THÔNG TIN NHÂN VIÊN", JLabel.CENTER);
+    	title.setFont(new Font("Arial", Font.BOLD, 25));
+    	title.setForeground(Color.BLUE);
+    	this.add(title, BorderLayout.NORTH);
+    	
+    	// KET HOP FORM VA TABLE
+    	JPanel combine = new JPanel();
+    	combine.setLayout(new BoxLayout(combine, BoxLayout.Y_AXIS));
+    	
+    	// PANEL FORM
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // MA NHAN VIEN
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        maNV = new JLabel("Mã nhân viên: ");
+        panelForm.add(maNV, gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 3;
+        txtMaNV = new JTextField(50);
+        panelForm.add(txtMaNV, gbc);
+        
+        gbc.gridwidth = 1; // reset
+        
+        // TEN NHAN VIEN
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        hoNV = new JLabel("Họ: ");
+        panelForm.add(hoNV, gbc);
+        gbc.gridx = 1;
+        txtHoNV = new JTextField(20);
+        panelForm.add(txtHoNV, gbc);
+        
+        gbc.gridx = 2;
+        tenNV = new JLabel("Tên nhân viên: ");
+        panelForm.add(tenNV, gbc);
+        gbc.gridx = 3;
+        txtTenNV = new JTextField(20);
+        panelForm.add(txtTenNV, gbc);
+        
+        // TUOI NHAN VIEN
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        tuoiNV = new JLabel("Tuổi: ");
+        panelForm.add(tuoiNV, gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 3;
+        txtTuoi = new JTextField(50);
+        panelForm.add(txtTuoi, gbc);
+        
+        gbc.gridwidth = 1; // reset 
+        
+        // GIOI TINH NHAN VIEN
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panelForm.add(new JLabel("Phái:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 3;
+        gioitinhNV = new JComboBox<>(new String[]{"Nam", "Nữ"});
+        panelForm.add(gioitinhNV, gbc);
+        gbc.gridwidth = 1;
+
+        // TIEN LUONG
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        luongNV = new JLabel("Tiền lương:");
+        panelForm.add(luongNV, gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 3;
+        txtLuong = new JTextField(50);
+        panelForm.add(txtLuong, gbc);
+        
+        
+        combine.add(panelForm);
+        
+        // TABLE        
+        String[] columns = {"Mã nhân viên", "Họ", "Tên", "Phái", "Tuổi", "Tiền lương"};
+        Object[][] data = {};
+        tableModel = new DefaultTableModel(data, columns) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column != 0; 
+            }
+        };
+        nhanvien_table = new JTable(tableModel);
+        
+        // EDIT GENDER COLUMN
+        TableColumn genderColumn = nhanvien_table.getColumnModel().getColumn(3); 
+        JComboBox<String> genderComboBox = new JComboBox<>(new String[]{"Nam", "Nữ"});
+        genderColumn.setCellEditor(new DefaultCellEditor(genderComboBox));
+        
+        // COMBINE
+        combine.add(new JScrollPane(nhanvien_table));
+        
+        // ADD COMBINE TABLE TO THE CENTRE OF TABLE
+    	this.add(combine, BorderLayout.CENTER);
+    	
+    	// SOUTH
+    	JPanel combine2 = new JPanel();
+    	combine2.setLayout(new BoxLayout(combine2, BoxLayout.X_AXIS));
+    	
+    	// TIM NHAN VIEN THEO MA NV
+    	JPanel timNV_panel = new JPanel();
+    	timNV = new JLabel("Nhập mã số cần tìm: ");
+    	timNV_panel.add(timNV);
+    	txtTimNV = new JTextField(20);
+    	timNV_panel.add(txtTimNV);
+    	btnTim = new JButton("Tim");
+    	timNV_panel.add(btnTim);
+    	
+    	// TIM NHAN VIEN    	
+    	btnTim = new JButton("Tìm");
+    	btnTim.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent e) {
+    	        String maNV = txtMaNV.getText();
+    	        findEmployee(maNV); 
+    	    }
+    	});
+    	combine2.add(timNV_panel);
+    	
+        // PANEL BUTTONS FOR ACTIONS
+        JPanel panelButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        btnThem = new JButton("Thêm");
+        btnThem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addEmployee();
+            }
+        });
+        panelButtons.add(btnThem);
+
+        btnSua = new JButton("Xóa trắng");
+        btnSua.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                clearFields();
+            }
+        });
+        panelButtons.add(btnSua);
+
+        btnXoa = new JButton("Xóa");
+        btnXoa.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                deleteEmployee();
+            }
+        });
+        panelButtons.add(btnXoa);
+
+        btnLuu = new JButton("Lưu");
+        panelButtons.add(btnLuu);
+
+        combine2.add(panelButtons);
+        this.add(combine2, BorderLayout.SOUTH);
+    	
+    	pack();
+    	setLocationRelativeTo(null);
+    	setVisible(true);
+    	
+    }
+    // THEM NHAN VIEN VAO BANG
+    private void addEmployee() {
+    	try {
+    		String maNV = txtMaNV.getText();
+    		String ho = txtHoNV.getText();
+    		String tenNV = txtTenNV.getText();
+    		String phai = gioitinhNV.getSelectedItem().toString();
+    		int tuoi = Integer.parseInt(txtTuoi.getText());
+    		double luong = Double.parseDouble(txtLuong.getText());
+    		
+    		NhanVien nv = new NhanVien(maNV, ho, tenNV, phai, tuoi, luong);
+    		
+    		nv_manage.addNV(nv);
+    		tableModel.addRow(new Object[]{nv.getNv_id(), nv.getNv_ho(), nv.getNv_ten(), nv.getNv_tuoi(), nv.getNv_gt(), nv.getNv_luong()});
+    		
+    		JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong!");
+    		clearFields();
+    		
+    	} catch (NumberFormatException e) {
+    		JOptionPane.showMessageDialog(this, "Vui long nhap ma nhan vien hop le.");
+    	}
+    }
+
+    // XOA NHAN VIEN DUOC CHON
+    private void deleteEmployee() {
+        int selectedRow = nhanvien_table.getSelectedRow();
+        if (selectedRow >= 0) {
+            tableModel.removeRow(selectedRow);
+        }
+    }
+    
+    // LUU DATABASE
+    private void saveDatabase() {
+    	
+    }
+
+    // XOA TOAN BO DU LIEU TRONG BANG
+    private void clearFields() {
+        txtMaNV.setText("");
+        txtHoNV.setText("");
+        txtTenNV.setText("");
+        txtTuoi.setText("");
+        txtLuong.setText("");
+        gioitinhNV.setSelectedIndex(0);
+    }
+    // TIM NHAN VIEN THEO MA NHAN VIEN
+    private void findEmployee(String maNV) {
+    	try {
+    		String input = txtTimNV.getText();
+    		boolean found = false;
+    		tableModel.setRowCount(0);
+    		
+    		for (NhanVien nv : nv_manage.getNV()) {
+    			
+    			if (nv.getNv_id() == input) {
+    				tableModel.addRow(new Object[] {nv.getNv_id(), nv.getNv_ho(), nv.getNv_ten(), nv.getNv_tuoi(), nv.getNv_gt(), nv.getNv_luong()});
+    				found = true;
+    			}
+    		}
+    		
+    		if (!found) {
+    			JOptionPane.showMessageDialog(this, "Khong tim thay nhan vien voi ID: " + input);
+    		}    		
+    	} catch (NumberFormatException e) {
+    		JOptionPane.showMessageDialog(this, "Vui long nhap ma nhan vien hop le.");
+    	}
+    }
+}

@@ -1,0 +1,11 @@
+package net.codejava.sql;
+
+import java.util.regex.*;
+
+public class regex {
+	public static void main(String[] args) {
+		String regex = "[a-z]+";
+		String text = "Tran Thai Tinh";
+		Pattern p = Pattern.compile(regex);
+	}
+}
